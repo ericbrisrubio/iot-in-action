@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="/cdn/index.css/css">
 </head>
 <body onload="onLoadBody()" onresize="onLoadBody()">
-<div>
+<div id="my-grid">
   <div class="grid-item grid-cell">
     <div class="bttnPosition"><a href="#" onclick="setPosition(1)" class="myButton">Position-1</a></div>
   </div>
@@ -13,6 +13,7 @@
   <div class="grid-item grid-cell"><div class="bttnPosition"><a href="#" onclick="setPosition(4)" class="myButton">Position-4</a></div></div>
   <div class="grid-item grid-cell"><div class="bttnPosition"><a href="#" onclick="setPosition(5)" class="myButton">Position-5</a></div></div>
   <div class="grid-item grid-cell"><div id="resetbtn" data-long-press-delay="1000" class="bttnPosition"><a href="#" onclick="setPosition(6)" class="myButton">RESET</a></div></div>
+    <button onclick="fullScreenMode()">FullScreenMode</button>
 </div>
     <script src="/cdn/long-press.js/js"></script>
     <script src="/cdn/index.js/js"></script>

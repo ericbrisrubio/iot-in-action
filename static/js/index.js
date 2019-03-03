@@ -17,7 +17,21 @@ function httpGetAsync(theUrl, callback)
     xmlHttp.send(null);
 }
 
+function fullScreenMode(){
+    var fElem = document.getElementById("my-grid");
+    if (fElem.requestFullscreen) {
+        fElem.requestFullscreen();
+    } else if (fElem.webkitRequestFullscreen) {
+        fElem.webkitRequestFullscreen();
+    } else if (fElem.mozRequestFullScreen) {
+        fElem.mozRequestFullScreen();
+    } else if (fElem.msRequestFullscreen) {
+        fElem.msRequestFullscreen();
+    }
+}
+
 function onLoadBody(){
+
     var  tempWidth = document.documentElement.clientWidth;
     var tempHeight = document.documentElement.clientHeight;
     var elements = document.getElementsByClassName("bttnPosition");
