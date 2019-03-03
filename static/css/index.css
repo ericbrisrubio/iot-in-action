@@ -16,6 +16,10 @@ html, body, .grid-container { height: 100%; margin: 0; }
   padding:0.5em;
 }
 
+.grid-container {
+	display: grid;
+}
+
 .myButton {
   text-align: center;
   vertical-align: middle;
