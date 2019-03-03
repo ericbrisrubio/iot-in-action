@@ -27,6 +27,7 @@ const (
     POSITION4    = 4
     POSITION5    = 5
     RESET        = 6
+    HARDRESET    = 7
     POSITIONTIME = 3
     BaseUrl = "http://192.168.86.211:8070"
 )
@@ -166,10 +167,13 @@ func renderAdminPage(w http.ResponseWriter, r *http.Request) {
 
 //this function determine how many positions the table has to be move and the way. Positive goes up and negative goes down
 func determineTableMovement(goTo int) int {
-    if goTo == POSITION1 || goTo == POSITION2 || goTo == POSITION3 || goTo == POSITION4 || goTo == POSITION5 || goTo == RESET {
-        if (goTo == RESET) {
+    if goTo == POSITION1 || goTo == POSITION2 || goTo == POSITION3 || goTo == POSITION4 || goTo == POSITION5 || goTo == RESET || goTo == HARDRESET{
+        if goTo == RESET {
             return -1 * currentPosition
         }
+	if goTo == HARDRESET {
+	    return -15
+	}
         return goTo - currentPosition
     }
     return 0
