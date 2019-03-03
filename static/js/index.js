@@ -16,3 +16,13 @@ function httpGetAsync(theUrl, callback)
     xmlHttp.open("GET", theUrl, true); // true for asynchronous
     xmlHttp.send(null);
 }
+
+function onLoadBody(){
+    var  tempWidth = document.documentElement.clientWidth;
+    var tempHeight = document.documentElement.clientHeight;
+    var elements = document.getElementsByClassName("bttnPosition");
+    for (var i=0; i<elements.length; i++){
+        elements[i].style.height=tempHeight/3-10+"px";
+        //elements[i].style.width=tempWidth/3-5+"px";
+    }
+}
