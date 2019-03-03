@@ -207,7 +207,7 @@ func cdnProvider(writer http.ResponseWriter, request *http.Request) {
 
 //render file content based on a template
 func renderText(w http.ResponseWriter, tmpl string, data interface{}, folder string) {
-    tmpl = fmt.Sprintf("../static/"+folder+"%s", tmpl)
+    tmpl = fmt.Sprintf("static/"+folder+"%s", tmpl)
     t, err := text_tmpl.ParseFiles(tmpl)
     //text_tmpl
     if err != nil {

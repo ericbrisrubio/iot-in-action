@@ -1,7 +1,7 @@
 function setPosition(position){
   theUrl = "/position/"+position;
   var callback = function(responseText){
-    alert(responseText);
+    console.log(responseText);
   }
   httpGetAsync(theUrl, callback);
 }
