@@ -28,6 +28,6 @@ function onLoadBody(){
 
     var el = document.getElementById('resetbtn');
     el.addEventListener('long-press', function(e) {
-        alert("test");
+        setPosition(7);
     });
 }
