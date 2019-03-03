@@ -25,4 +25,9 @@ function onLoadBody(){
         elements[i].style.height=tempHeight/3-10+"px";
         //elements[i].style.width=tempWidth/3-5+"px";
     }
+
+    var el = document.getElementById('resetbtn');
+    el.addEventListener('long-press', function(e) {
+        alert("test");
+    });
 }
