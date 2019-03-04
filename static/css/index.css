@@ -2,8 +2,8 @@ html, body, .grid-container { height: 100%; margin: 0; }
 
 .grid-cell{
   padding:0.5em;
-	width: 48%;
-	float: left;
+  width: 45%;
+  float: left;
 }
 
 

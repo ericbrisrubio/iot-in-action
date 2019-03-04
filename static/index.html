@@ -6,15 +6,15 @@
 <body onload="onLoadBody()" onresize="onLoadBody()">
 <div id="my-grid">
   <div class="grid-item grid-cell">
-    <div class="bttnPosition"><a href="#" onclick="setPosition(1)" class="myButton">Position-1</a></div>
+    <div class="bttnPosition"><a href="#" onclick="setPosition(1,event)" class="myButton">Position-1</a></div>
   </div>
-  <div class="grid-item grid-cell"><div class="bttnPosition"><a href="#" onclick="setPosition(2)" class="myButton">Position-2</a></div></div>
-  <div class="grid-item grid-cell"><div class="bttnPosition"><a href="#" onclick="setPosition(3)" class="myButton">Position-3</a></div></div>
-  <div class="grid-item grid-cell"><div class="bttnPosition"><a href="#" onclick="setPosition(4)" class="myButton">Position-4</a></div></div>
-  <div class="grid-item grid-cell"><div class="bttnPosition"><a href="#" onclick="setPosition(5)" class="myButton">Position-5</a></div></div>
-  <div class="grid-item grid-cell"><div id="resetbtn" data-long-press-delay="1000" class="bttnPosition"><a href="#" onclick="setPosition(6)" class="myButton">RESET</a></div></div>
-    <button onclick="fullScreenMode()">FullScreenMode</button>
+  <div class="grid-item grid-cell"><div class="bttnPosition"><a href="#" onclick="setPosition(2,event)" class="myButton">Position-2</a></div></div>
+  <div class="grid-item grid-cell"><div class="bttnPosition"><a href="#" onclick="setPosition(3,event)" class="myButton">Position-3</a></div></div>
+  <div class="grid-item grid-cell"><div class="bttnPosition"><a href="#" onclick="setPosition(4,event)" class="myButton">Position-4</a></div></div>
+  <div class="grid-item grid-cell"><div class="bttnPosition"><a href="#" onclick="setPosition(5,event)" class="myButton">Position-5</a></div></div>
+  <div class="grid-item grid-cell"><div class="bttnPosition"><a href="#" onclick="setPosition(6, event)" class="myButton">RESET</a></div></div>
 </div>
+<button onclick="fullScreenMode()">FullScreenMode</button>
     <script src="/cdn/long-press.js/js"></script>
     <script src="/cdn/index.js/js"></script>
 </body>

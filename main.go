@@ -127,6 +127,9 @@ func position(w http.ResponseWriter, r *http.Request) {
     positionMovement := determineTableMovement(positionInt)
 
     currentPosition = currentPosition + positionMovement
+    if positionMovement == -15{
+        currentPosition = 0;
+    }
     if positionMovement > 0 {
         on(w, r)
         time.Sleep(time.Duration(positionMovement) * POSITIONTIME * time.Second)

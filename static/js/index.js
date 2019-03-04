@@ -1,4 +1,5 @@
-function setPosition(position){
+function setPosition(position,event){
+  event.preventDefault();	
   theUrl = "/position/"+position;
   var callback = function(responseText){
     console.log(responseText);
@@ -28,6 +29,7 @@ function fullScreenMode(){
     } else if (fElem.msRequestFullscreen) {
         fElem.msRequestFullscreen();
     }
+    onLoadBody();	
 }
 
 function onLoadBody(){
@@ -40,8 +42,8 @@ function onLoadBody(){
         //elements[i].style.width=tempWidth/3-5+"px";
     }
 
-    var el = document.getElementById('resetbtn');
-    el.addEventListener('long-press', function(e) {
-        setPosition(7);
-    });
+//    var el = document.getElementById('resetbtn');
+//    el.addEventListener('long-press', function(e) {
+//        setPosition(7);
+//    });
 }
