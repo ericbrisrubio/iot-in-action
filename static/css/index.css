@@ -1,20 +1,11 @@
 html, body, .grid-container { height: 100%; margin: 0; }
 
-.grid-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1.1fr;
-  grid-template-areas: ". ." ". ." ". .";
-  height: inherit;
-}
-
-.bttnPosition{
-  min-height: 15em;
-}
-
 .grid-cell{
   padding:0.5em;
+  width: 45%;
+  float: left;
 }
+
 
 .myButton {
   text-align: center;
