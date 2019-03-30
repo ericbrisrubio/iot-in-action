@@ -9,8 +9,8 @@ import (
     "net/http"
     "os"
     "strconv"
-    "time"
     text_tmpl "text/template"
+    "time"
 )
 
 var (
@@ -21,15 +21,16 @@ var (
 )
 
 const (
-    POSITION1    = 1
-    POSITION2    = 2
-    POSITION3    = 3
-    POSITION4    = 4
-    POSITION5    = 5
-    RESET        = 6
-    HARDRESET    = 7
+    POSITION1 = iota + 1
+    POSITION2
+    POSITION3
+    POSITION4
+    POSITION5
+    RESET
+    HARDRESET
+
     POSITIONTIME = 3
-    BaseUrl = "http://192.168.86.211:8070"
+    BaseUrl      = "http://192.168.86.211:8070"
 )
 
 func main() {
@@ -127,7 +128,7 @@ func position(w http.ResponseWriter, r *http.Request) {
     positionMovement := determineTableMovement(positionInt)
 
     currentPosition = currentPosition + positionMovement
-    if positionMovement == -15{
+    if positionMovement == -15 {
         currentPosition = 0;
     }
     if positionMovement > 0 {
@@ -165,18 +166,26 @@ func defineEndpoints() {
 func renderAdminPage(w http.ResponseWriter, r *http.Request) {
     //index := template.Must(template.ParseFiles("static/index.html"))
     data := map[string]interface{}{"Asi": "daleeeeee"}
-    renderText(w, "index.html", data, "")
+    template_admin, err := renderText("index.html", data, "")
+    if err != nil {
+        fmt.Println(err.Error())
+    } else {
+        err = template_admin.Execute(w, data)
+        if err != nil {
+            log.Print("template executing error: ", err)
+        }
+    }
 }
 
 //this function determine how many positions the table has to be move and the way. Positive goes up and negative goes down
 func determineTableMovement(goTo int) int {
-    if goTo == POSITION1 || goTo == POSITION2 || goTo == POSITION3 || goTo == POSITION4 || goTo == POSITION5 || goTo == RESET || goTo == HARDRESET{
+    if goTo == POSITION1 || goTo == POSITION2 || goTo == POSITION3 || goTo == POSITION4 || goTo == POSITION5 || goTo == RESET || goTo == HARDRESET {
         if goTo == RESET {
             return -1 * currentPosition
         }
-	if goTo == HARDRESET {
-	    return -15
-	}
+        if goTo == HARDRESET {
+            return -15
+        }
         return goTo - currentPosition
     }
     return 0
@@ -199,29 +208,43 @@ func cdnProvider(writer http.ResponseWriter, request *http.Request) {
         folder = "js/"
     }
 
+    var template *text_tmpl.Template
+    var err error
+    var parseVars map[string]interface{} = nil
     if filename == "test.js" {
         folder = "js/"
-        parseVars := map[string]interface{}{"baseUrl": BaseUrl}
-        renderText(writer, filename, parseVars, folder)
+        parseVars = map[string]interface{}{"baseUrl": BaseUrl}
+        template, err =renderText(filename, parseVars, folder)
     } else if filename == "index.js" {
         folder = "js/"
-        parseVars := map[string]interface{}{"Asi": BaseUrl}
-        renderText(writer, filename, parseVars, folder)
+        parseVars = map[string]interface{}{"Asi": BaseUrl}
+        template, err = renderText(filename, parseVars, folder)
+
     } else {
-        renderText(writer, filename, nil, folder)
+        template, err = renderText(filename, nil, folder)
+    }
+    if err != nil {
+        fmt.Println(err.Error())
+    } else {
+        err = template.Execute(writer, parseVars)
+        if err != nil {
+            log.Print("template executing error: ", err)
+        }
     }
 }
 
 //render file content based on a template
-func renderText(w http.ResponseWriter, tmpl string, data interface{}, folder string) {
+func renderText(tmpl string, data interface{}, folder string) (*text_tmpl.Template, error){
     tmpl = fmt.Sprintf("static/"+folder+"%s", tmpl)
     t, err := text_tmpl.ParseFiles(tmpl)
     //text_tmpl
     if err != nil {
-        log.Print("template parsing error: ", err)
+        //log.Print("template parsing error: ", err)
+        return nil, err
     }
-    err = t.Execute(w, data)
+    return t, nil
+    /*err = t.Execute(w, data)
     if err != nil {
         log.Print("template executing error: ", err)
-    }
+    }*/
 }
