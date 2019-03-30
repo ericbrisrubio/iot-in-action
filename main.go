@@ -4,117 +4,43 @@ import (
     "encoding/json"
     "fmt"
     "github.com/gorilla/mux"
-    "github.com/stianeikeland/go-rpio"
     "log"
     "net/http"
-    "os"
     "strconv"
     text_tmpl "text/template"
-    "time"
 )
 
 var (
-    // Use mcu pin 10, corresponds to physical pin 19 on the pi
-    pin             = rpio.Pin(14)
-    pin1            = rpio.Pin(15)
     currentPosition = -1
 )
 
 const (
-    POSITION1 = iota + 1
-    POSITION2
-    POSITION3
-    POSITION4
-    POSITION5
-    RESET
-    HARDRESET
-
-    POSITIONTIME = 3
     BaseUrl      = "http://192.168.86.211:8070"
 )
 
 func main() {
-    if currentPosition == -1 {
-        //read info from file and setup "currentPosition" var
-        //in case the file does not exist or it is empty the var should be set to 0
-        currentPosition = 0 //this should change later when reading from the file. this is a temp line
-    }
     defineEndpoints()
 }
 
-func rootMethod(w http.ResponseWriter, r *http.Request) {
-    // Open and map memory to access gpio, check for errors
-    if err := rpio.Open(); err != nil {
-        fmt.Println(err)
-        os.Exit(1)
-    }
-
-    // Unmap gpio memory when done
-    defer rpio.Close()
-
-    // Set pin to output mode
-    pin.Output()
-
-    w.WriteHeader(http.StatusOK)
-    // Toggle pin 20 times
-    //for x := 0; x < 5; x++ {
-    pin.Toggle()
-    //	time.Sleep(time.Second*3)
-    //}
-
+func (mm *moverManager)on(w http.ResponseWriter, r *http.Request) {
+    mm.MoverObj.On()
     jsonReturn := map[string]interface{}{"version": "1.0", "shouldEndSession": true}
     json.NewEncoder(w).Encode(jsonReturn)
 }
 
-func on(w http.ResponseWriter, r *http.Request) {
-    if err := rpio.Open(); err != nil {
-        fmt.Println(err)
-        os.Exit(1)
-    }
-    defer rpio.Close()
-    pin.Output()
-    pin1.Output()
-
-    pin1.Low()
-    pin.High()
-
+func (mm *moverManager)off(w http.ResponseWriter, r *http.Request) {
+    mm.MoverObj.Off()
     jsonReturn := map[string]interface{}{"version": "1.0", "shouldEndSession": true}
     json.NewEncoder(w).Encode(jsonReturn)
 }
 
-func off(w http.ResponseWriter, r *http.Request) {
-    if err := rpio.Open(); err != nil {
-        fmt.Println(err)
-        os.Exit(1)
-    }
-    defer rpio.Close()
-    pin.Output()
-    pin1.Output()
-
-    pin.Low()
-    pin1.High()
-
+func (mm *moverManager)stop(w http.ResponseWriter, r *http.Request) {
+    mm.MoverObj.Stop()
     jsonReturn := map[string]interface{}{"version": "1.0", "shouldEndSession": true}
     json.NewEncoder(w).Encode(jsonReturn)
 }
 
-func stop(w http.ResponseWriter, r *http.Request) {
-    if err := rpio.Open(); err != nil {
-        fmt.Println(err)
-        os.Exit(1)
-    }
-    defer rpio.Close()
-    pin.Output()
-    pin1.Output()
-
-    pin.Low()
-    pin1.Low()
-
-    jsonReturn := map[string]interface{}{"version": "1.0", "shouldEndSession": true}
-    json.NewEncoder(w).Encode(jsonReturn)
-}
-
-func position(w http.ResponseWriter, r *http.Request) {
+func (mm *moverManager)position(w http.ResponseWriter, r *http.Request) {
     vars := mux.Vars(r)
     position := vars["number"]
     var err error
@@ -122,37 +48,36 @@ func position(w http.ResponseWriter, r *http.Request) {
     tempPosition, err = strconv.ParseInt(position, 10, 64)
     if err != nil {
         fmt.Println(err.Error())
+        w.WriteHeader(http.StatusForbidden)
     }
     var positionInt int
     positionInt = int(tempPosition)
-    positionMovement := determineTableMovement(positionInt)
+    //positionMovement := mm.DetermineTableMovement(positionInt)
 
-    currentPosition = currentPosition + positionMovement
-    if positionMovement == -15 {
-        currentPosition = 0;
-    }
-    if positionMovement > 0 {
-        on(w, r)
-        time.Sleep(time.Duration(positionMovement) * POSITIONTIME * time.Second)
-    } else {
-        off(w, r)
-        positionMovement = -1 * positionMovement
-        time.Sleep(time.Duration(positionMovement) * POSITIONTIME * time.Second)
-    }
-
-    stop(w, r)
+    //currentPosition = currentPosition + positionMovement
+    mm.MoverObj.Position(positionInt)
     jsonReturn := map[string]interface{}{"version": "1.0"}
     json.NewEncoder(w).Encode(jsonReturn)
+}
+
+/*
+Controller of Mover methods
+ */
+type moverManager struct {
+    MoverObj Mover
 }
 
 func defineEndpoints() {
     router := mux.NewRouter()
     //router.HandleFunc("/", rootMethod).Methods("GET")
 
-    router.HandleFunc("/up", on).Methods("GET")
-    router.HandleFunc("/down", off).Methods("GET")
-    router.HandleFunc("/stop", stop).Methods("GET")
-    router.HandleFunc("/position/{number}", position).Methods("GET")
+    mm := moverManager{}
+    mm.MoverObj = new(Table).InitialSetup()
+
+    router.HandleFunc("/up", mm.on).Methods("GET")
+    router.HandleFunc("/down", mm.off).Methods("GET")
+    router.HandleFunc("/stop", mm.stop).Methods("GET")
+    router.HandleFunc("/position/{number}", mm.position).Methods("GET")
     router.HandleFunc("/index", renderAdminPage).Methods("GET")
     router.HandleFunc("/cdn/{filename}", cdnProvider).Methods("GET")
     router.HandleFunc("/cdn/{filename}/{data_type}", cdnProvider).Methods("GET")
@@ -178,18 +103,7 @@ func renderAdminPage(w http.ResponseWriter, r *http.Request) {
 }
 
 //this function determine how many positions the table has to be move and the way. Positive goes up and negative goes down
-func determineTableMovement(goTo int) int {
-    if goTo == POSITION1 || goTo == POSITION2 || goTo == POSITION3 || goTo == POSITION4 || goTo == POSITION5 || goTo == RESET || goTo == HARDRESET {
-        if goTo == RESET {
-            return -1 * currentPosition
-        }
-        if goTo == HARDRESET {
-            return -15
-        }
-        return goTo - currentPosition
-    }
-    return 0
-}
+
 
 //provide files being asked throughout the api
 func cdnProvider(writer http.ResponseWriter, request *http.Request) {
