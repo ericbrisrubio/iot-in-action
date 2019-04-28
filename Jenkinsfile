@@ -1,6 +1,6 @@
 node {
     checkout([$class: 'GitSCM', branches: [[name: '*/master']],
-     userRemoteConfigs: [[url:'https://github.com/ericbrisrubio/iot-in-action.git'], [credentialsId: '9fe8edbd-979d-45b2-812c-8e4e1d8aae17']]])
+     userRemoteConfigs: [[url:'https://github.com/ericbrisrubio/iot-in-action.git'], [credentialsId: 'b57c3c6c-9e1a-4da7-a269-452a81dbf82e']]])
     stage("go build"){
         sh "echo testing" 
     }
