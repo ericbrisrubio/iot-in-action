@@ -6,7 +6,9 @@ node {
             sh 'go version'
         }
     stage("Build"){
-        sh "go build"
+        withEnv(["GOROOT=${root}", "PATH+GO=${root}/bin"]) {
+                    sh 'go build'
+                }
     }
     stage("Test"){
         sh "echo testing 2"
