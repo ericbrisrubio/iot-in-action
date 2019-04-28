@@ -8,10 +8,14 @@ node {
             GO112MODULE = 'on'
         }
     stage("Compile"){
-        sh 'go build'
+      steps{
+         sh 'go build'
+      }
     }
     stage("Test"){
-        sh 'go test'
+        steps{
+             sh 'go test'
+              }
     }
     stage("Deploy"){
             sh "echo Deployment"
