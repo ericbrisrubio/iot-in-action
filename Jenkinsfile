@@ -6,7 +6,7 @@ node {
             sh 'go version'
         }
     stage("Build"){
-        sh "echo testing"
+        sh "go build"
     }
     stage("Test"){
         sh "echo testing 2"
