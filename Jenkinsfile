@@ -1,23 +1,10 @@
 node {
     checkout([$class: 'GitSCM', branches: [[name: '*/master']],
      userRemoteConfigs: [[url:'https://github.com/ericbrisrubio/iot-in-action.git'], [credentialsId: 'b57c3c6c-9e1a-4da7-a269-452a81dbf82e']]])
-    tool {
-            go 'go-1.12'
-        }
-        environment {
-            GO112MODULE = 'on'
-        }
-    stage("Compile"){
-      steps{
-         sh 'go build'
-      }
+    stage("go build"){
+        sh "echo testing"
     }
-    stage("Test"){
-        steps{
-             sh 'go test'
-              }
+    stage("go test"){
+        sh "echo testing 2"
     }
-    stage("Deploy"){
-            sh "echo Deployment"
-        }
 }
