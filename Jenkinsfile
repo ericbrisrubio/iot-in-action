@@ -9,6 +9,7 @@ node {
         withEnv(["GOROOT=${root}", "PATH+GO=${root}/bin"]) {
                     sh 'echo $PATH'
                     sh 'echo $GOROOT'
+                    sh 'go test'
                 }
     }
     stage("Build"){
