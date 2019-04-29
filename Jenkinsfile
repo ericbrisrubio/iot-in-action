@@ -6,8 +6,8 @@ node {
             sh 'go version'
         }
     stage("Build"){
-        withEnv(["GOROOT=${root}", "GOPATH=${WORKSPACE}/go" , "PATH+GO=${root}/bin"]) {
-                    sh 'go build -mod vendor'
+        withEnv(["GOROOT=${root}", "GOPATH=" + pwd() , "PATH+GO=${root}/bin"]) {
+                    sh 'go build'
                 }
     }
     stage("Test"){
