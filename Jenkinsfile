@@ -6,7 +6,7 @@ node {
             sh 'go version'
         }
     stage("Test"){
-        withEnv(["GOROOT=${root}", "PATH=$PATH:/opt/go/bin", "GOROOT=${root}/bin"]) {
+        withEnv(["GOROOT=${root}", "PATH=$PATH:${root}/bin", "PATH+GO=${root}/bin"]) {
                     sh 'echo $PATH'
                     sh 'go test'
                 }
