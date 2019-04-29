@@ -7,8 +7,7 @@ node {
         }
     stage("Build"){
         withEnv(["GOROOT=${root}", "GOPATH=${WORKSPACE}/go" , "PATH+GO=${root}/bin"]) {
-                    sh 'echo env'
-                    sh 'go build'
+                    sh 'go build -mod vendor'
                 }
     }
     stage("Test"){
