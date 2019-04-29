@@ -7,6 +7,7 @@ node {
         }
     stage("Build"){
         withEnv(["GOROOT=${root}", "GOPATH=" + pwd() , "PATH+GO=${root}/bin"]) {
+                    dir(${root}/pkg){}
                     sh 'go get ./...'
                     sh 'go build'
                 }
