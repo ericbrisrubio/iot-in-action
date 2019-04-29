@@ -11,7 +11,9 @@ node {
                 }
     }
     stage("Test"){
-        sh 'go test'
+        withEnv(["GOROOT=${root}", "PATH+GO=${root}/bin"]) {
+                    sh 'go test'
+                }
     }
     stage("Deploy"){
             sh "echo testing 3"
