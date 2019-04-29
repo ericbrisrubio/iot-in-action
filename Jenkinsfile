@@ -11,7 +11,7 @@ node {
                 }
     }
     stage("Test"){
-        sh "echo testing 2"
+        sh 'go test'
     }
     stage("Deploy"){
             sh "echo testing 3"
