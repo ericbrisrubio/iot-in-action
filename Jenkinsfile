@@ -7,13 +7,13 @@ node {
         }
     stage("Test"){
         withEnv(["GOROOT=${root}", "PATH+GO=${root}/bin", "CGO_ENABLED=0", "GO111MODULE=off"]) {
-                    sh 'echo $PATH'
-                    sh 'echo $GOROOT'
+                    sh 'echo RUNNING TESTS'
                     sh 'go test'
                 }
     }
     stage("Build"){
         withEnv(["GOROOT=${root}", "PATH+GO=${root}/bin"]) {
+                    sh 'BUILDING PROJECT'
                     sh 'go build'
                 }
     }
