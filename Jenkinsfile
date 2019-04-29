@@ -5,15 +5,15 @@ node {
     withEnv(["GOROOT=${root}", "PATH+GO=${root}/bin"]) {
             sh 'go version'
         }
+    stage("Test"){
+        withEnv(["GOROOT=${root}", "PATH=$PATH:/opt/go/bin", "PATH+GO=${root}/bin"]) {
+                    sh 'echo $PATH'
+                    sh 'go test'
+                }
+    }
     stage("Build"){
         withEnv(["GOROOT=${root}", "PATH+GO=${root}/bin"]) {
                     sh 'go build'
-                }
-    }
-    stage("Test"){
-        withEnv(["GOROOT=${root}", "GO112MODULE=on", "PATH+GO=${root}/bin"]) {
-                    sh 'echo $PATH'
-                    sh 'go test'
                 }
     }
     stage("Deploy"){
