@@ -20,8 +20,8 @@ node {
     stage("Deploy"){
          withEnv(["GOROOT=${root}", "PATH+GO=${root}/bin"]) {
             sshagent(credentials : ['0493bba9-397a-4bfb-a289-d1e10a372476']) {
-                sh 'ssh -o StrictHostKeyChecking=no root@ubuntu uptime'
-                sh 'ssh -v root@ubuntu'
+                sh 'ssh -o StrictHostKeyChecking=no root@ubuntu1 uptime'
+                sh 'ssh -v root@ubuntu1'
                 ///sh 'scp ./source/filename root@ubutnu:/remotehost/target'
             }
          }
