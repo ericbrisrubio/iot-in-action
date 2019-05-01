@@ -22,9 +22,9 @@ node {
             sshagent(credentials : ['0493bba9-397a-4bfb-a289-d1e10a372476']) {
                 sh 'ssh -o StrictHostKeyChecking=no root@ubuntu uptime'
                 sh 'ssh -v root@ubuntu'
-                sh 'scp ~/iot-in-action root@ubuntu:/'
-                //sh "ssh root@ubuntu 'cd / | ./iot-in-action .&'"
-                sh "ssh root@ubuntu 'df -H'"
+                sh 'scp ~/iot-in-action root@ubuntu:~/'
+                sh 'ssh root@ubuntu ./iot-in-action .&'
+                //sh "ssh root@ubuntu 'df -H'"
             }
          }
      }
