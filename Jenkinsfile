@@ -23,7 +23,7 @@ node {
                 sh 'ssh -o StrictHostKeyChecking=no root@ubuntu uptime'
                 sh 'ssh -v root@ubuntu'
                 sh 'scp ~/iot-in-action root@ubuntu:/'
-                sh 'ssh root@ubuntu cd / | ./iot-in-action .&'
+                sh "ssh root@ubuntu 'cd / | ./iot-in-action .&'"
             }
          }
      }
